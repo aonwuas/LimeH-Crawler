@@ -11,17 +11,20 @@ class Sender:
 
 
 		def __init__(self, url):
-			self.target = url
+		    self.target = url
 		
 		def add_payload(self, payload):
-			pass
+		    self.payload = payload	
+                    pass
 
 		def send_post(self):
-			pass
+                        r = requests.post(self.target, self.payload)
+                        return r.status_code
+
 
 	def make_request(self, url):
 		if request is None:
-			request = self.Request(url)
+			self.request = self.Request(url)
 		else:
 			# Complete or delete current request
 			pass
@@ -30,9 +33,9 @@ class Sender:
         def set_payload(self, payload):
             pass
 
-	def send_request:
+	def send:
 		if request is not None:
-			pass
+                    return self.request.send_post()
 		else:
 			pass
 
