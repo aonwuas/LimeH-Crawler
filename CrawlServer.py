@@ -2,37 +2,41 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 # True port # is 80
 # PORT_ NUMBER = 80
+
 PORT_NUMBER = 8080
 
 class CrawlServer(BaseHTTPRequestHandler):
-
-	#Handle POST requests
-	def do_POST(self):
-
-            content_len = int(self.getheader('content-length',0))
-            body = self.rfile.read(content_len)
-            # Link analysis asking for robots.txt parse
-	    if self.path == "/robots":
-                parseRobotstxt(body)
-            # Link Analysis giving link to crawl
-            elif self.path == "/crawl":
-                addUrlToQueue(body)
-            # Crawler requesting link from queue
-            elif self.path == "/url":
-                sendCrawlerUrl(body)
-            else:
-                pass
+    
+    #Handle POST requests
+    def do_POST(self):
+        print("Received POST request")
+        content_len = int(self.headers['Content-Length'], 0)
+        body = self.rfile.read(content_len)
+        # Link analysis asking for robots.txt parse
+	if self.path == "/robots":
+            parseRobotstxt(body)
+        # Link Analysis giving link to crawl
+        elif self.path == "/crawl":
+            addUrlToQueue(body)
+        # Crawler requesting link from queue
+        elif self.path == "/url":
+            sendCrawlerUrl(body)
+        else:
+            pass
     
     
     def parseRobotstxt(self, body):
+        print("/robots\nGot: " + body)
         return
     
     
     def addUrlToQueue(self, body):
+        print("/crawl\nGot: " + body)
         return
     
     
     def sendCrawlerUrl(self, body):
+        print("/url\nGot: " + body)
         return
     
     
