@@ -4,7 +4,7 @@ from threading import Thread
 
 # Crawler class
 # Extends: threading.Thread
-class Crawler(Thread)
+class Crawler(Thread):
 
 	def __init__(self):
 		pass

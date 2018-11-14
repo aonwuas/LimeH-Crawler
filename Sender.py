@@ -5,6 +5,9 @@ import requests
 class Sender:
 	request = None
 
+        def __init__(self):
+            return
+
 	class Request:
 		target = None
 		payload = None
