@@ -43,9 +43,15 @@ class CrawlServer(BaseHTTPRequestHandler):
     
     
     def respond(self, json_string):
+        print('respond')
         self.send_response(200)
+        print('end headers')
         self.end_headers()
-        self.wfile.write(json_string)
+        try:
+            print("try")
+            self.wfile.write(json_string)
+        except Exception as e:
+            print(str(e))
         return
 
     def start(self):

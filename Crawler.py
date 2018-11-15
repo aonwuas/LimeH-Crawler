@@ -43,14 +43,14 @@ class Crawler(Thread):
         # Behavior: Request URL from queue
         # Output: 
 	def request_url(self):
-            print('requesturl')
+            #print('requesturl')
             try:
-                print("URL: " + self.URL)
-                self.URL = 'lime-h.cs.rpi.edu:8081'
-                conn = httplib.HTTPConnection(self.URL)
-                print("Crawler " + self.iden + ": attemping to get url from " + self.URL)
-                conn.request('POST', "", None, None)
-                print('r')
+                #print("URL: " + self.URL)
+                self.URL = 'lime-h.cs.rpi.edu'
+                conn = httplib.HTTPConnection(self.URL, 8081, timeout=10)
+                #print("Crawler " + self.iden + ": attemping to get url from " + self.URL)
+                conn.request('POST', '/url', {}, {})
+                #print('r')
                 response = conn.getresponse()
                 if response is None:
                     print("Failed to get a response")
