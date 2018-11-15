@@ -14,13 +14,13 @@ class CrawlServer(BaseHTTPRequestHandler):
         body = self.rfile.read(content_len)
         # Link analysis asking for robots.txt parse
 	if self.path == "/robots":
-            parseRobotstxt(body)
+            self.parseRobotstxt(body)
         # Link Analysis giving link to crawl
         elif self.path == "/crawl":
-            addUrlToQueue(body)
+            self.addUrlToQueue(body)
         # Crawler requesting link from queue
         elif self.path == "/url":
-            sendCrawlerUrl(body)
+            self.sendCrawlerUrl(body)
         else:
             pass
     
@@ -37,6 +37,8 @@ class CrawlServer(BaseHTTPRequestHandler):
     
     def sendCrawlerUrl(self, body):
         print("/url\nGot: " + body)
+        json_string = "https://stackoverflow.com"
+        self.respond(json_string)
         return
     
     
@@ -46,18 +48,18 @@ class CrawlServer(BaseHTTPRequestHandler):
         self.wfile.write(json_string)
         return
 
+    def start(self):
+        #following snippet taken from https://www.acmesystems.it/python_http
+        try:
+            #Create a web server and define the handler to manage the
+            #incoming request
+            server = HTTPServer(('', PORT_NUMBER), CrawlServer)
+            print 'Started httpserver on port ' , PORT_NUMBER
 
-#following snippet taken from https://www.acmesystems.it/python_http
-try:
-    #Create a web server and define the handler to manage the
-    #incoming request
-    server = HTTPServer(('', PORT_NUMBER), CrawlServer)
-    print 'Started httpserver on port ' , PORT_NUMBER
+            #Wait forever for incoming htto requests
+            server.serve_forever()
 
-    #Wait forever for incoming htto requests
-    server.serve_forever()
-
-except KeyboardInterrupt:
-    print '^C received, shutting down the web server'
-    server.socket.close()
+        except KeyboardInterrupt:
+            print '^C received, shutting down the web server'
+            server.socket.close()
 
