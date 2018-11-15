@@ -27,12 +27,15 @@ class CrawlServer(BaseHTTPRequestHandler):
     
     
     def parseRobotstxt(self, body):
-        print("/robots\nGot: " + body)
+        #print("/robots\nGot: " + body)
+        json_string = 'Parsed robots.txt links'
+        self.q_respond(json_string)
         return
     
     
     def addUrlToQueue(self, body):
-        print("/crawl\nGot: " + body)
+        #print("/crawl\nGot: " + body)
+        self.q_respond(None)
         return
     
     
@@ -50,7 +53,8 @@ class CrawlServer(BaseHTTPRequestHandler):
         self.end_headers()
         #try:
         #    print("try")
-        self.wfile.write(json_string)
+        if json_string != None:
+            self.wfile.write(json_string)
         #except Exception as e:
         #    print(str(e))
         print('end respond')

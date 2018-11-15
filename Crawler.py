@@ -23,14 +23,19 @@ class Crawler(Thread):
                     print("Crawler " + self.iden + ": URL endpoint not found. Sleeping for 5 seconds")
                     self.sleep(5000)
                 else:
-                    print('Result of request_url' + str(r))
+                    req = self.page_request(r)
+                    if req.read() != None and req.read() != "":
+                        print("page pulled successfully")
+                    #print(req.read())
+                    self.sleep(800)
 
 
 	# Input: String URL to grab
 	# Behavior: 
 	# Output: urllib2 request object
 	def page_request(self, url):
-		return urllib2.urlopen(url)
+            print('Grabbing ' + url)
+	    return urllib2.urlopen(url)
 
 
 	# Input: urllib2.request object
@@ -61,8 +66,8 @@ class Crawler(Thread):
                 if response is None:
                     print("Failed to get a response")
                     return None
-                print("Response: " + response)
-                return None
+                #print("Response: " + response)
+                return response
                 #if response.status == '200 OK':
                 #    url = response.read()
                 #    if url != "":
