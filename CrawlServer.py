@@ -20,6 +20,7 @@ class CrawlServer(BaseHTTPRequestHandler):
             self.addUrlToQueue(body)
         # Crawler requesting link from queue
         elif self.path == "/url":
+            #print('url endpoint')
             self.sendCrawlerUrl(body)
         else:
             pass
@@ -36,22 +37,23 @@ class CrawlServer(BaseHTTPRequestHandler):
     
     
     def sendCrawlerUrl(self, body):
-        print("/url\nGot: " + body)
+        print("/url\tGot: " + body)
         json_string = "https://stackoverflow.com"
-        self.respond(json_string)
+        self.q_respond(json_string)
         return
     
     
-    def respond(self, json_string):
+    def q_respond(self, json_string):
         print('respond')
         self.send_response(200)
-        print('end headers')
+        #print('end headers')
         self.end_headers()
-        try:
-            print("try")
-            self.wfile.write(json_string)
-        except Exception as e:
-            print(str(e))
+        #try:
+        #    print("try")
+        self.wfile.write(json_string)
+        #except Exception as e:
+        #    print(str(e))
+        print('end respond')
         return
 
     def start(self):

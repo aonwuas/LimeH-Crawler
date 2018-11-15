@@ -1,6 +1,7 @@
 import urllib2, httplib
 from threading import Thread
 import time
+import requests
 
 # Link to url request endpoint
 
@@ -21,6 +22,8 @@ class Crawler(Thread):
                 if r is None:
                     print("Crawler " + self.iden + ": URL endpoint not found. Sleeping for 5 seconds")
                     self.sleep(5000)
+                else:
+                    print('Result of request_url' + str(r))
 
 
 	# Input: String URL to grab
@@ -46,24 +49,29 @@ class Crawler(Thread):
             #print('requesturl')
             try:
                 #print("URL: " + self.URL)
-                self.URL = 'lime-h.cs.rpi.edu'
-                conn = httplib.HTTPConnection(self.URL, 8081, timeout=10)
-                #print("Crawler " + self.iden + ": attemping to get url from " + self.URL)
-                conn.request('POST', '/url', {}, {})
-                #print('r')
-                response = conn.getresponse()
+                self.URL = 'http://lime-h.cs.rpi.edu:8081/url'
+                #conn = httplib.HTTPConnection(self.URL, 8081, timeout=10)
+                #print("Crawler " + self.iden + ": attemped to get url from " + self.URL)
+                #conn.request('POST', '/url', {}, {})
+                #print('conn.request')
+                #response = conn.getresponse()
+                r = requests.post(url = self.URL, data = None)
+                response = r.text
+                #print('conn.getresponse')
                 if response is None:
                     print("Failed to get a response")
                     return None
-                if response.status == '200 OK':
-                    url = response.read()
-                    if url != "":
-                        self.send_result(page_request(url))
-                    else:
-                        sleep(100)
-                        return true
+                print("Response: " + response)
+                return None
+                #if response.status == '200 OK':
+                #    url = response.read()
+                #    if url != "":
+                #        self.send_result(page_request(url))
+                #    else:
+                #        sleep(100)
+                #        return true
             except Exception as e:
-                print(str(e))
+                print("Exception in Crawler.py " + str(e))
                 return None
 
 
