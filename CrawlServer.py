@@ -8,13 +8,11 @@ PORT_NUMBER = 8080
 class CrawlServer(BaseHTTPRequestHandler):
     link_list = [] 
     robot_parser = None
-    def __init__():
-        print("Init crawlserver")
-        self.robot_parser = ParseRobots.Parser()
-
 
     #Handle POST requests
     def do_POST(self):
+        if self.robot_parser == None:
+            self.robot_parser = ParseRobots.Parser()
         print("Received POST request")
         content_len = int(self.headers['Content-Length'], 0)
         body = self.rfile.read(content_len)
@@ -23,6 +21,7 @@ class CrawlServer(BaseHTTPRequestHandler):
             self.parseRobotstxt(body)
         # Link Analysis giving link to crawl
         elif self.path == "/crawl":
+            print("/crawl")
             self.addUrlToQueue(body)
         # Crawler requesting link from queue
         elif self.path == "/url":
@@ -47,9 +46,13 @@ class CrawlServer(BaseHTTPRequestHandler):
     
     
     def sendCrawlerUrl(self, body):
+        #print("crawler request, links are: ")# + str(self.link_list))
+        #print(str(self.link_list))
         json_string = ""
         if(len(self.link_list) > 0):
-            json_string = self.link_list.pop(0)
+            link = self.link_list.pop(0)
+            #print("sending link to crawler: " + str(link))
+            json_string = link
         self.q_respond(json_string)
         return
     

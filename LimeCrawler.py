@@ -3,7 +3,7 @@ from CrawlServer import CrawlServer
 from Crawler import Crawler
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
-URL = 'lime-h.cs.rpi.edu'
+URL = 'http://lime-h.cs.rpi.edu'
 
 # Usage python LimeCrawler [python LimeCrawler.py port* num_crawlers*]
 # *optional args
@@ -21,11 +21,10 @@ if __name__ == "__main__":
         #server = CrawlServer(port)
 	# Start Crawler(s)
         url = URL + ":" + str(port) + "/url"
-        print(url)
-        #for i in range(0, num_crawlers):
-            #crawler = Crawler(i, url)
-            #crawler.start()
-            #crawlers.append(crawler)
+        for i in range(0, num_crawlers):
+            crawler = Crawler(i, url)
+            crawler.start()
+            crawlers.append(crawler)
         # Create SendSer Object
 
 
@@ -33,7 +32,6 @@ if __name__ == "__main__":
         try:
             #Create a web server and define the handler to manage the
             #incoming requests
-            print("try start")
             server = HTTPServer(('', port), CrawlServer)
             print 'Started httpserver on port ' , port
 

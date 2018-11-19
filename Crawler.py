@@ -19,13 +19,18 @@ class Crawler(Thread):
             print("Crawler " + self.iden + " started")
             while(True):
                 r = self.request_url()
-                if r is None:
-                    print("Crawler " + self.iden + ": URL endpoint not found. Sleeping for 5 seconds")
+                if r is None or len(r) == 0:
+                    #print("Crawler " + self.iden + ": URL endpoint not found. Sleeping for 5 seconds")
                     self.sleep(5000)
                 else:
+                    print("link received")
                     req = self.page_request(r)
-                    if req.read() != None and req.read() != "":
-                        print("page pulled successfully")
+                    if req != None:
+                        req = req.read()
+                        if req != "":
+                    #if req.read() != None and req.read() != "":
+                            print(req)
+                            print("page pulled successfully")
                     #print(req.read())
                     self.sleep(800)
 
@@ -54,7 +59,7 @@ class Crawler(Thread):
             #print('requesturl')
             try:
                 #print("URL: " + self.URL)
-                self.URL = 'http://lime-h.cs.rpi.edu:8081/url'
+                #self.URL = 'http://lime-h.cs.rpi.edu:8081/url'
                 #conn = httplib.HTTPConnection(self.URL, 8081, timeout=10)
                 #print("Crawler " + self.iden + ": attemped to get url from " + self.URL)
                 #conn.request('POST', '/url', {}, {})
