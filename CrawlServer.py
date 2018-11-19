@@ -1,12 +1,18 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-
+import ParseRobots
 # True port # is 80
 # PORT_ NUMBER = 80
 
 PORT_NUMBER = 8080
 
 class CrawlServer(BaseHTTPRequestHandler):
-   link_list = [] 
+    link_list = [] 
+    robot_parser = None
+    def __init__():
+        print("Init crawlserver")
+        self.robot_parser = ParseRobots.Parser()
+
+
     #Handle POST requests
     def do_POST(self):
         print("Received POST request")
@@ -27,8 +33,7 @@ class CrawlServer(BaseHTTPRequestHandler):
     
     
     def parseRobotstxt(self, body):
-        #print("/robots\nGot: " + body)
-        json_string = 'Parsed robots.txt links'
+        json_string = self.robot_parser.parse(str(body).strip())
         self.q_respond(json_string)
         return
     
@@ -55,7 +60,7 @@ class CrawlServer(BaseHTTPRequestHandler):
         if json_string != None:
             self.wfile.write(json_string)
         return
-
+'''
     def start(self):
         #following snippet taken from https://www.acmesystems.it/python_http
         try:
@@ -70,4 +75,4 @@ class CrawlServer(BaseHTTPRequestHandler):
         except KeyboardInterrupt:
             print '^C received, shutting down the web server'
             server.socket.close()
-
+'''

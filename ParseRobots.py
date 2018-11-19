@@ -1,12 +1,31 @@
 import re
+import urllib2
+DISALLOW = r'[Dd]isallow:\s?'
 
-DISALLOW = '[Dd]isallow:\s?'
+class Parser:
 
-class ParseRobots:
-    def parse(string):
-        
-        lines = []
-        for line in string:
+    def __init__(self):
+        pass
 
+    def get_robots_txt(self, url):
+        try:
+            req = urllib2.Request(url)
+            req.add_header('User-Agent', 'LimeCrawler')
+            r = urllib2.urlopen(req).read()
+            return r
+        except Exception as e:
+            print(str(e))
+
+    def parse(self, url):
+        print("parse")
+        ro_text = self.get_robots_txt(url)
+        return self._parse(ro_text)
+
+    def _parse(self, ro_text):
+        links = []
+        for line in ro_text.split('\n'):
+            if re.match(DISALLOW, line):
+                links.append(re.sub(DISALLOW, "", line))
+        return links
 
 

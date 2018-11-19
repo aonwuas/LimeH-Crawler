@@ -12,26 +12,28 @@ if __name__ == "__main__":
         num_crawlers = 1
         crawlers = []
         if len(sys.argv) == 2:
-            port = sys.argv[1]
+            port = int(sys.argv[1])
         elif len(sys.argv) == 3:
-            port = sys.argv[1]
+            port = int(sys.argv[1])
             num_crawlers = int(sys.argv[2])
 
         #Start CrawlServer
         #server = CrawlServer(port)
 	# Start Crawler(s)
         url = URL + ":" + str(port) + "/url"
-        for i in range(0, num_crawlers):
-            crawler = Crawler(i, url)
-            crawler.start()
-            crawlers.append(crawler)
+        print(url)
+        #for i in range(0, num_crawlers):
+            #crawler = Crawler(i, url)
+            #crawler.start()
+            #crawlers.append(crawler)
         # Create SendSer Object
 
 
         #following snippet taken from https://www.acmesystems.it/python_http
         try:
             #Create a web server and define the handler to manage the
-            #incoming request
+            #incoming requests
+            print("try start")
             server = HTTPServer(('', port), CrawlServer)
             print 'Started httpserver on port ' , port
 
