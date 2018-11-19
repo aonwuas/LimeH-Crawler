@@ -6,7 +6,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 PORT_NUMBER = 8080
 
 class CrawlServer(BaseHTTPRequestHandler):
-    
+   link_list = [] 
     #Handle POST requests
     def do_POST(self):
         print("Received POST request")
@@ -34,30 +34,26 @@ class CrawlServer(BaseHTTPRequestHandler):
     
     
     def addUrlToQueue(self, body):
-        #print("/crawl\nGot: " + body)
+        #strip whitespace from link and add to queue
+        self.link_list.append(str(body).strip())
+        print("\'" + str(body).strip() + "\' added to queue")
         self.q_respond(None)
         return
     
     
     def sendCrawlerUrl(self, body):
-        print("/url\tGot: " + body)
-        json_string = "https://stackoverflow.com"
+        json_string = ""
+        if(len(self.link_list) > 0):
+            json_string = self.link_list.pop(0)
         self.q_respond(json_string)
         return
     
     
     def q_respond(self, json_string):
-        print('respond')
         self.send_response(200)
-        #print('end headers')
         self.end_headers()
-        #try:
-        #    print("try")
         if json_string != None:
             self.wfile.write(json_string)
-        #except Exception as e:
-        #    print(str(e))
-        print('end respond')
         return
 
     def start(self):

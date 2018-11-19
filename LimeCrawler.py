@@ -20,9 +20,8 @@ if __name__ == "__main__":
         #Start CrawlServer
         #server = CrawlServer(port)
 	# Start Crawler(s)
+        url = URL + ":" + str(port) + "/url"
         for i in range(0, num_crawlers):
-            url = URL + ":" + str(port) + "/url"
-            print(url)
             crawler = Crawler(i, url)
             crawler.start()
             crawlers.append(crawler)
