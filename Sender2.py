@@ -1,28 +1,35 @@
 import requests
 
 
-TEXT_TRANSFORMATION = ""
-LINK_ANALYSIS = ""
-INDEXING = ""
+TEXT = 'text_transformation'
+LINK = 'link_analysis'
+INDEX = 'indexing'
+DEFAULT_HEADERS = { 'user-agent': 'LimeH-Crawler' }
 class Sender:
 
-    def targets(target_string):
-        if target_string == "text_transformation":
+    @staticmethod
+    def TEXT():
+        return TEXT
+
+    @staticmethod
+    def LINK():
+        return LINK
+    
+    @staticmethod
+    def INDEX():
+        return INDEX
+
+    @staticmethod
+    def send_request(target, headers, payload):
+        print("headers: " + str(headers))
+        if target == TEXT:
+            print("Got 2XX sending to " + TEXT)
+            
+
+        elif target == LINK:
             pass
-        elif target_string == "link_analysis":
-            pass
-        elif target_string == "indexing":
+        elif target == INDEX:
             pass
         else:
             return None
 
-    def send_request(target, headers, payload):
-        target_info = targets(target)
-        if target_info is not None:
-            pass
-        result = requests.post(target, data = payload)
-        return result
-
-
-    def default_headers():
-        return { 'user-agent': 'LimeH-Crawler' }

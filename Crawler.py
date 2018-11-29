@@ -27,7 +27,7 @@ class Crawler(Thread):
                 # Try to get page
                 else:
                     request = self.page_request(url)
-                    process_result(request)
+                    self.process_result(request, url)
                     self.sleep(800)
 
 
@@ -41,8 +41,25 @@ class Crawler(Thread):
 	# Input: urllib2.request object
 	# Behavior: Based on result of request, send information to Link Analysis, Text Transformation or Indexing
         # Output: 
-	def process_result(self, request):
+	def process_result(self, request, url):
                 if request is not None:
+                    code = request.getcode()
+                    # Success, send to text_transformation
+                    if code >= 200 and code < 300:
+                        header = request.info()
+                        content = request.read()
+                        Sender.send_request(Sender.TEXT(), header, content)
+                    # Failure, notify indexing and link analysis
+                    elif code >= 400 and code < 500:
+                        Sender.send_request(Sender.LINK(), None, url)
+                        Sender.send_request(Sender.INDEX(), None, url)
+                    # Server error
+                    elif code >= 500 and code < 600:
+                        # TODO store code to check again in XX seconds
+                        pass
+                    else:
+                        #possible redirection or something went terribly wrong
+                        pass
 		    header = request.info()
 		    content = request.read()
 		return
