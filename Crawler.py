@@ -2,6 +2,7 @@ import urllib2, httplib
 from threading import Thread
 import time
 import requests
+from Sender2 import Sender
 
 # Link to url request endpoint
 
@@ -18,20 +19,15 @@ class Crawler(Thread):
         def run(self):
             print("Crawler " + self.iden + " started")
             while(True):
-                r = self.request_url()
-                if r is None or len(r) == 0:
-                    #print("Crawler " + self.iden + ": URL endpoint not found. Sleeping for 5 seconds")
+                # Request URL from internal /url endpoint
+                url = self.request_url()
+                # No response or empty string.  Sleep 5s
+                if url is None or len(url) == 0:
                     self.sleep(5000)
+                # Try to get page
                 else:
-                    print("link received")
-                    req = self.page_request(r)
-                    if req != None:
-                        req = req.read()
-                        if req != "":
-                    #if req.read() != None and req.read() != "":
-                            print(req)
-                            print("page pulled successfully")
-                    #print(req.read())
+                    request = self.page_request(url)
+                    process_result(request)
                     self.sleep(800)
 
 
@@ -39,16 +35,16 @@ class Crawler(Thread):
 	# Behavior: 
 	# Output: urllib2 request object
 	def page_request(self, url):
-            print('Grabbing ' + url)
 	    return urllib2.urlopen(url)
 
 
 	# Input: urllib2.request object
-	# Behavior:
+	# Behavior: Based on result of request, send information to Link Analysis, Text Transformation or Indexing
         # Output: 
-	def send_result(self, request):
-		header = request.info()
-		content = request.read()
+	def process_result(self, request):
+                if request is not None:
+		    header = request.info()
+		    content = request.read()
 		return
 
 
@@ -56,30 +52,16 @@ class Crawler(Thread):
         # Behavior: Request URL from queue
         # Output: 
 	def request_url(self):
-            #print('requesturl')
+
             try:
-                #print("URL: " + self.URL)
-                #self.URL = 'http://lime-h.cs.rpi.edu:8081/url'
-                #conn = httplib.HTTPConnection(self.URL, 8081, timeout=10)
-                #print("Crawler " + self.iden + ": attemped to get url from " + self.URL)
-                #conn.request('POST', '/url', {}, {})
-                #print('conn.request')
-                #response = conn.getresponse()
                 r = requests.post(url = self.URL, data = None)
                 response = r.text
-                #print('conn.getresponse')
+
                 if response is None:
                     print("Failed to get a response")
                     return None
-                #print("Response: " + response)
                 return response
-                #if response.status == '200 OK':
-                #    url = response.read()
-                #    if url != "":
-                #        self.send_result(page_request(url))
-                #    else:
-                #        sleep(100)
-                #        return true
+
             except Exception as e:
                 print("Exception in Crawler.py " + str(e))
                 return None
