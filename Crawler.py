@@ -2,7 +2,8 @@ import urllib2, httplib
 from threading import Thread
 import time
 import requests
-from Sender2 import Sender
+from urllib2 import HTTPError
+from Sender import Sender
 
 # Link to url request endpoint
 
@@ -31,11 +32,17 @@ class Crawler(Thread):
                     self.sleep(800)
 
 
+
 	# Input: String URL to grab
 	# Behavior: 
 	# Output: urllib2 request object
 	def page_request(self, url):
-	    return urllib2.urlopen(url)
+            try:
+	        #res =  urllib2.urlopen(url)
+                return urllib2.urlopen(url)
+            # Catch error statuses like 404s
+            except HTTPError as e:
+                return e
 
 
 	# Input: urllib2.request object

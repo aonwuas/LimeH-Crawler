@@ -1,47 +1,33 @@
 import requests
 
-# Still needs error handling
 
+TEXT = 'text_transformation'
+LINK = 'link_analysis'
+INDEX = 'indexing'
+DEFAULT_HEADERS = { 'user-agent': 'LimeH-Crawler' }
 class Sender:
-	request = None
 
-        def __init__(self):
-            return
+    @staticmethod
+    def TEXT():
+        return TEXT
 
-	class Request:
-		target = None
-		payload = None
+    @staticmethod
+    def LINK():
+        return LINK
+    
+    @staticmethod
+    def INDEX():
+        return INDEX
 
+    @staticmethod
+    def send_request(target, headers, payload):
+        if target == TEXT:
+            print("Got 2XX sending to " + TEXT)
+            print("HEADERS:\n" + str(headers))
+        elif target == LINK:
+            print("Got 4XX telling " + LINK)
+        elif target == INDEX:
+            print("Got 4XX telling " + INDEX)
+        else:
+            return None
 
-		def __init__(self, url):
-		    self.target = url
-		
-		def add_payload(self, payload):
-		    self.payload = payload	
-                    pass
-
-		def send_post(self):
-                        r = requests.post(self.target, self.payload)
-                        return r.status_code
-
-
-	def make_request(self, url):
-		if request is None:
-			self.request = self.Request(url)
-		else:
-			# Complete or delete current request
-			pass
-
-
-        def set_payload(self, payload):
-            pass
-
-	def send:
-		if request is not None:
-                    return self.request.send_post()
-		else:
-			pass
-
-        def reset_request:
-                request = None
-                return
