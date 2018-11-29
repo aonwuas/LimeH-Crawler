@@ -1,4 +1,5 @@
 import sys
+import subprocess
 from CrawlServer import CrawlServer
 from Crawler import Crawler
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
@@ -8,7 +9,9 @@ URL = 'http://lime-h.cs.rpi.edu'
 # Usage python LimeCrawler [python LimeCrawler.py port* num_crawlers*]
 # *optional args
 if __name__ == "__main__":
-        port = 8081
+        # Kill apache2 to free up port 80
+        subprocess.call("./stop.sh")
+        port = 80
         num_crawlers = 1
         crawlers = []
         if len(sys.argv) == 2:
@@ -17,15 +20,12 @@ if __name__ == "__main__":
             port = int(sys.argv[1])
             num_crawlers = int(sys.argv[2])
 
-        #Start CrawlServer
-        #server = CrawlServer(port)
-	# Start Crawler(s)
+        # url endpoint for crawler to request link
         url = URL + ":" + str(port) + "/url"
         for i in range(0, num_crawlers):
             crawler = Crawler(i, url)
             crawler.start()
             crawlers.append(crawler)
-        # Create SendSer Object
 
 
         #following snippet taken from https://www.acmesystems.it/python_http

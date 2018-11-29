@@ -7,6 +7,8 @@ class Parser:
     def __init__(self):
         pass
 
+
+    # GET site robots.txt
     def get_robots_txt(self, url):
         try:
             req = urllib2.Request(url)
@@ -16,11 +18,12 @@ class Parser:
         except Exception as e:
             print(str(e))
 
+    # External parse request
     def parse(self, url):
-        print("parse")
         ro_text = self.get_robots_txt(url)
         return self._parse(ro_text)
-
+    
+    # Internal parse logic.  Return all lines beginning with Disallow
     def _parse(self, ro_text):
         links = []
         for line in ro_text.split('\n'):
