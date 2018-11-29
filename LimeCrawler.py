@@ -11,7 +11,7 @@ URL = 'http://lime-h.cs.rpi.edu'
 if __name__ == "__main__":
         # Kill apache2 to free up port 80
         #subprocess.call("./stop.sh")
-        port = 80
+        port = 8080
         num_crawlers = 1
         crawlers = []
         if len(sys.argv) == 2:
