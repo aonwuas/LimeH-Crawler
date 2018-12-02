@@ -31,11 +31,14 @@ class CrawlServer(BaseHTTPRequestHandler):
     
 # Override message BaseHTTPRequestHandler logging function to ignore internal API calls
     def log_message(self, format, *args):
-        if('url'in args[0]):
-            pass
-        else:
-            BaseHTTPRequestHandler.log_message(self, format, *args)
-        return
+        try:
+            if('url'in args[0]):
+                pass
+            else:
+                BaseHTTPRequestHandler.log_message(self, format, *args)
+            return
+        catch Exception as e:
+            print(e)
 
     def parseRobotstxt(self, body):
         json_string = self.robot_parser.parse(str(body).strip())
