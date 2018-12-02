@@ -37,7 +37,7 @@ class CrawlServer(BaseHTTPRequestHandler):
             else:
                 BaseHTTPRequestHandler.log_message(self, format, *args)
             return
-        catch Exception as e:
+        except Exception as e:
             print(e)
 
     def parseRobotstxt(self, body):
