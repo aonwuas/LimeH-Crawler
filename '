@@ -2,6 +2,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import ParseRobots
 import json
 import re
+import ast
 # True port # is 80
 # PORT_ NUMBER = 80
 
@@ -47,12 +48,24 @@ class CrawlServer(BaseHTTPRequestHandler):
     
     def addUrlToQueue(self, body):
         # 'URLs': ['url1', 'url2', 'url3', 'url4']
-        # Replace any single quotes with double quotes (single quotes are not valid json)
+        #print(body)
+        #print(body.strip())
         json_text = re.sub(r"'", '"', body)
-        json_text = json.loads(json_text)
-        self.link_list.extend(json_text['URLs'])
-        self.q_respond(None)
+        json_text = ast.literal_eval(json.loads(json_text))
+        print(json_text)
+        #print(type(json_text))
+        #print(json_text)
+        #parsed_json = json.loads(json_text)
+        #print(body['URLs'])
+        #print(dict(json.loads(parsed_json))['URLs'])
+        #print("json")
+        #print(parsed_json)
+        #print("url")
+        print(json_text['URLs'])
         return
+        #self.link_list.append(str(body).strip())
+        #self.q_respond(None)
+        #return
     
     
     def sendCrawlerUrl(self, body):
