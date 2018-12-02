@@ -1,5 +1,8 @@
 import requests
 import re
+import jsonizer
+import datetime
+import requests
 
 TEXT = 'text_transformation'
 LINK = 'link_analysis'
@@ -24,31 +27,27 @@ class Sender:
         return INDEX
 
     @staticmethod
-    def send_request(target, headers, content):
+    def send_request(target, request, url):
         payload = {}
-        url = ''
         access_time = ''
         # 2XX success, send to text transformation
         if target == TEXT:
-            url = 'url'
-            for line in str(headers).split('\n'):
-                if re.match(ACCESS_TIME, line):
-                    access_time = re.sub(ACCESS_TIME, "", line)
-                    print(line)
-            forward_address = 'forward_address'
+            access_time = datetime.datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+            content = request.read()
+            forward_address = '' #request.headers['access-time']
             payload = {
+                    'url': url,
                     'metadata': {
-                        'url': url,
                         'access_time': access_time,
                         'forward address': forward_address
-                        }
+                        },
+                    'content': { content }
                     }
-           # print(payload)
-           # print(headers)
         # 4XX error, notify link analysis
         elif target == LINK:
             payload = {}
-            url = 'http://green-eth.cs.rpi.edu/crawling'
+            url1 = 'http://green-eth.cs.rpi.edu/crawling'
+            url2 = ''
         # 4XX error, notify indexing
         elif target == INDEX:
             payload = {}

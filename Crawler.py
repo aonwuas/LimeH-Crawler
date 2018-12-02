@@ -53,13 +53,11 @@ class Crawler(Thread):
                     code = request.getcode()
                     # Success, send to text_transformation
                     if code >= 200 and code < 300:
-                        header = request.info()
-                        content = request.read()
-                        Sender.send_request(Sender.TEXT(), header, content)
+                        Sender.send_request(Sender.TEXT(), request, url)
                     # Failure, notify indexing and link analysis
                     elif code >= 400 and code < 500:
-                        Sender.send_request(Sender.LINK(), None, url)
-                        Sender.send_request(Sender.INDEX(), None, url)
+                        Sender.send_request(Sender.LINK(), request, url)
+                        Sender.send_request(Sender.INDEX(), request, url)
                     # Server error
                     elif code >= 500 and code < 600:
                         # TODO store code to check again in XX seconds
@@ -67,8 +65,6 @@ class Crawler(Thread):
                     else:
                         #possible redirection or something went terribly wrong
                         pass
-		    header = request.info()
-		    content = request.read()
 		return
 
 

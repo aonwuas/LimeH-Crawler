@@ -1,7 +1,6 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import ParseRobots
-import json
-import re
+from jsonizer import jsonize
 # True port # is 80
 # PORT_ NUMBER = 80
 
@@ -26,7 +25,6 @@ class CrawlServer(BaseHTTPRequestHandler):
             self.addUrlToQueue(body)
         # Crawler requesting link from queue
         elif self.path == "/url":
-            #print('url endpoint')
             self.sendCrawlerUrl(body)
         else:
             pass
@@ -46,11 +44,9 @@ class CrawlServer(BaseHTTPRequestHandler):
     
     
     def addUrlToQueue(self, body):
-        # 'URLs': ['url1', 'url2', 'url3', 'url4']
-        # Replace any single quotes with double quotes (single quotes are not valid json)
-        json_text = re.sub(r"'", '"', body)
-        json_text = json.loads(json_text)
-        self.link_list.extend(json_text['URLs'])
+        # { 'URLs': ['url1', 'url2', 'url3', 'url4'] }
+        url_list = jsonize(body)['URLs']
+        self.link_list.extend(url_list)
         self.q_respond(None)
         return
     
@@ -62,7 +58,7 @@ class CrawlServer(BaseHTTPRequestHandler):
             json_string = link
         self.q_respond(json_string)
         return
-    
+
     
     def q_respond(self, json_string):
         self.send_response(200)
