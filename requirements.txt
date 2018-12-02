@@ -1,4 +1,3 @@
-BaseHTTPServer
-httplib
+uhttplib
 requests
 urllib2
