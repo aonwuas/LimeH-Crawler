@@ -19,13 +19,13 @@ class CrawlServer(BaseHTTPRequestHandler):
         body = self.rfile.read(content_len)
         # Link analysis asking for robots.txt parse
 	if self.path == "/robots":
-            self.parseRobotstxt(body)
+            self.parse_robots_txt(body)
         # Link Analysis giving link to crawl
         elif self.path == "/crawl":
-            self.addUrlToQueue(body)
+            self.add_url_to_queue(body)
         # Crawler requesting link from queue
         elif self.path == "/url":
-            self.sendCrawlerUrl(body)
+            self.send_crawler_url(body)
         else:
             pass
     
@@ -40,14 +40,14 @@ class CrawlServer(BaseHTTPRequestHandler):
         except Exception as e:
             print(e)
 
-    def parseRobotstxt(self, body):
+    def parse_robots_txt(self, body):
         json_string = self.robot_parser.parse(str(body).strip())
         json_string = '{\n\tDisallowed: ' + str(json_string) + '\n}'
         self.q_respond(json_string)
         return
     
     
-    def addUrlToQueue(self, body):
+    def add_url_to_queue(self, body):
         # { 'URLs': ['url1', 'url2', 'url3', 'url4'] }
         url_list = jsonize(body)['URLs']
         self.link_list.extend(url_list)
@@ -55,7 +55,7 @@ class CrawlServer(BaseHTTPRequestHandler):
         return
     
     
-    def sendCrawlerUrl(self, body):
+    def send_crawler_url(self, body):
         url = ""
         if(len(self.link_list) > 0):
             link = self.link_list.pop(0)
