@@ -42,6 +42,7 @@ class CrawlServer(BaseHTTPRequestHandler):
 
     def parseRobotstxt(self, body):
         json_string = self.robot_parser.parse(str(body).strip())
+        json_string = '{\n\tDisallowed: ' + str(json_string) + '\n}'
         self.q_respond(json_string)
         return
     
@@ -55,11 +56,11 @@ class CrawlServer(BaseHTTPRequestHandler):
     
     
     def sendCrawlerUrl(self, body):
-        json_string = ""
+        url = ""
         if(len(self.link_list) > 0):
             link = self.link_list.pop(0)
-            json_string = link
-        self.q_respond(json_string)
+            url = link
+        self.q_respond(url)
         return
 
     
